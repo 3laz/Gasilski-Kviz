@@ -1,0 +1,839 @@
+<!DOCTYPE html>
+<html lang="sl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Gasilska akademija</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&display=swap" rel="stylesheet">
+<style>
+/* Strip: debele črne obrobe, polton ozadje, močne barve. Postavitev: ena stolpec, velike tipke za prste. */
+:root{
+  --ink:#1b1830; --red:#e5321f; --yellow:#ffcf30; --blue:#1c74d9; --green:#1f9d55; --orange:#ff8a1f;
+  --sky:#d6f0ff; --paper:#ffffff; --soft:#fff3c4;
+  --display:'Baloo 2','Trebuchet MS','Arial Rounded MT Bold',system-ui,sans-serif;
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  background-color:var(--sky);
+  background-image:radial-gradient(rgba(28,116,217,.2) 1.6px,transparent 1.8px);
+  background-size:14px 14px;
+  color:var(--ink);
+  font-family:var(--display);font-weight:500;font-size:18px;line-height:1.35;
+  -webkit-tap-highlight-color:transparent;
+}
+.wrap{max-width:640px;margin:0 auto;padding:14px 16px 48px;display:flex;flex-direction:column;gap:16px}
+h1,h2,h3,p{margin:0}
+.panel{background:var(--paper);border:4px solid var(--ink);border-radius:18px;box-shadow:6px 6px 0 var(--ink);padding:14px 16px}
+.panel.yellow{background:var(--soft)}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.row.sp{justify-content:space-between}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.btn{
+  font:inherit;font-weight:800;font-size:1.1rem;color:var(--ink);background:var(--yellow);
+  border:4px solid var(--ink);border-radius:14px;padding:11px 16px;box-shadow:4px 4px 0 var(--ink);
+  cursor:pointer;touch-action:manipulation;text-align:center;
+}
+.btn:active{transform:translate(3px,3px);box-shadow:1px 1px 0 var(--ink)}
+.btn.red{background:var(--red);color:#fff}
+.btn.blue{background:var(--blue);color:#fff}
+.btn.green{background:var(--green);color:#fff}
+.btn.white{background:#fff}
+.btn.big{font-size:1.4rem;padding:14px 18px;width:100%}
+.btn.small{font-size:.95rem;padding:6px 12px;box-shadow:3px 3px 0 var(--ink);border-width:3px}
+:focus-visible{outline:4px solid var(--blue);outline-offset:3px}
+
+/* Naslov */
+.logo{text-align:center}
+.logo h1{
+  font-weight:800;font-size:clamp(2.1rem,10vw,3.4rem);line-height:.95;color:var(--yellow);
+  -webkit-text-stroke:8px var(--ink);paint-order:stroke fill;text-shadow:4px 5px 0 var(--red);
+  transform:rotate(-2deg);letter-spacing:.5px;text-transform:uppercase;margin:6px 0 0;
+}
+.logo .sub{display:inline-block;margin-top:10px;background:var(--red);color:#fff;border:3px solid var(--ink);border-radius:10px;padding:2px 12px;font-weight:800;transform:rotate(1.5deg)}
+
+/* Oder z maskotoma */
+.stagewrap{position:relative}
+.stage{display:block;width:100%;height:auto;background:#bfe6ff;border:4px solid var(--ink);border-radius:18px;box-shadow:6px 6px 0 var(--ink)}
+.stage .ground{stroke:var(--ink);stroke-width:4}
+.fl{transform:translate(292px,160px) scale(var(--to,1))}
+.fl.anim{animation:shrink .8s ease-out forwards}
+@keyframes shrink{from{transform:translate(292px,160px) scale(var(--from,1))}to{transform:translate(292px,160px) scale(var(--to,1))}}
+.flick{animation:flick .55s ease-in-out infinite alternate}
+@keyframes flick{from{transform:scale(1,1)}to{transform:scale(.94,1.07)}}
+.flare{animation:flare .45s ease-in-out 2}
+@keyframes flare{50%{transform:scale(1.25,1.2)}}
+.jet{fill:none;stroke:var(--blue);stroke-width:10;stroke-linecap:round;stroke-dasharray:100;stroke-dashoffset:100;animation:jetdraw .45s ease-out forwards}
+.jet2{stroke:#bfe6ff;stroke-width:3.2}
+@keyframes jetdraw{to{stroke-dashoffset:0}}
+.spark{fill:#ffcf30;stroke:#1b1830;stroke-width:1.2;transform-box:fill-box;transform-origin:center;animation:rise 1.7s ease-out infinite}
+@keyframes rise{0%{transform:translate(0,0) scale(1);opacity:0}15%{opacity:1}100%{transform:translate(var(--dx,0px),-34px) scale(.3);opacity:0}}
+.drop{fill:#1c74d9;stroke:#1b1830;stroke-width:1.6;animation:drip .8s ease-out .35s both}
+@keyframes drip{0%{transform:translate(0,0);opacity:0}20%{opacity:1}100%{transform:translate(var(--dx),var(--dy));opacity:0}}
+.puff{fill:#fff;stroke:#1b1830;stroke-width:2.5;transform-box:fill-box;transform-origin:center;animation:puff 1s ease-out .4s both}
+@keyframes puff{0%{transform:translateY(0) scale(.3);opacity:0}30%{opacity:1}100%{transform:translateY(-22px) scale(1.2);opacity:0}}
+.smoke circle{fill:#e1e5ea;stroke:#1b1830;stroke-width:3;transform-box:fill-box;transform-origin:center;animation:smoke 3s ease-in-out infinite}
+@keyframes smoke{0%{transform:translateY(8px) scale(.6);opacity:0}30%{opacity:1}100%{transform:translateY(-22px) scale(1.15);opacity:0}}
+.confetti{position:absolute;inset:0;overflow:hidden;pointer-events:none;border-radius:18px}
+.confetti i{position:absolute;top:-16px;width:9px;height:14px;border:2px solid var(--ink);animation:fall 2.6s linear both}
+@keyframes fall{to{top:105%;transform:rotate(540deg)}}
+.badgepop{animation:pop .6s cubic-bezier(.2,1.6,.4,1) both;display:inline-block}
+.rk.lock .bdg{filter:grayscale(1)}
+.meds{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;text-align:center}
+.med{display:flex;flex-direction:column;align-items:center;gap:0;line-height:1.1}
+.med b{font-size:.85rem;font-weight:800}.med small{font-size:.8rem;font-weight:700}
+.medst{font-size:.95rem;-webkit-text-stroke:2px var(--ink);paint-order:stroke fill;letter-spacing:1px;margin-top:2px}
+.burst{position:absolute;left:50%;top:-4%;width:130px;height:112px;margin-left:-65px;pointer-events:none;animation:pop .55s cubic-bezier(.2,1.6,.4,1) both}
+.burst svg{position:absolute;inset:0;width:100%;height:100%}
+.burst span{position:absolute;inset:0;display:grid;place-items:center;font-weight:800;font-size:1.45rem;color:var(--red);transform:rotate(-8deg);text-align:center;line-height:1}
+@keyframes pop{from{transform:scale(.2) rotate(-30deg);opacity:0}to{transform:scale(1) rotate(0);opacity:1}}
+
+/* Zgornja vrstica */
+.top{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.pips{display:flex;gap:5px;flex:1;justify-content:center;flex-wrap:wrap}
+.pip{width:14px;height:14px;border-radius:50%;border:3px solid var(--ink);background:#fff}
+.pip.done{background:var(--green)} .pip.bad{background:var(--orange)} .pip.now{background:var(--yellow);transform:scale(1.25)}
+.chip{background:#fff;border:3px solid var(--ink);border-radius:999px;padding:2px 12px;font-weight:800;white-space:nowrap}
+
+/* Vprašanje */
+.tag{display:inline-block;border:3px solid var(--ink);border-radius:8px;padding:0 10px;font-weight:800;font-size:.9rem;transform:rotate(-2deg)}
+.qcard{position:relative}
+.qcard::before{content:"";position:absolute;left:34px;top:-18px;width:26px;height:26px;background:#fff;border-left:4px solid var(--ink);border-top:4px solid var(--ink);transform:rotate(45deg);border-radius:4px 0 0 0}
+.qtext{font-size:1.4rem;font-weight:800;line-height:1.25;margin-top:10px}
+.qicon{font-size:3.2rem;line-height:1;margin-top:10px;display:flex;align-items:center;min-height:56px}
+.team-banner{border:4px solid var(--ink);border-radius:14px;padding:6px 14px;font-weight:800;color:#fff;text-align:center;font-size:1.25rem;box-shadow:4px 4px 0 var(--ink)}
+.opts{display:flex;flex-direction:column;gap:12px}
+.opt{
+  display:flex;gap:12px;align-items:center;text-align:left;width:100%;font:inherit;font-weight:700;font-size:1.15rem;line-height:1.2;
+  color:var(--ink);background:#fff;border:4px solid var(--ink);border-radius:14px;padding:10px 12px;box-shadow:4px 4px 0 var(--ink);cursor:pointer;touch-action:manipulation;
+}
+.opt .let{flex:none;width:38px;height:38px;border-radius:50%;background:var(--ink);color:#fff;display:grid;place-items:center;font-weight:800}
+.opt:not(:disabled):active{transform:translate(3px,3px);box-shadow:1px 1px 0 var(--ink)}
+.opt:disabled{cursor:default}
+.opt.right{background:#b9f0cf}.opt.right .let{background:var(--green)}
+.opt.wrong{background:#ffd2ae}.opt.wrong .let{background:var(--orange)}
+.opt.dim{opacity:.5}
+.shake{animation:shake .4s}
+@keyframes shake{20%{transform:translateX(-7px)}40%{transform:translateX(7px)}60%{transform:translateX(-5px)}80%{transform:translateX(5px)}}
+
+/* Pogovorni oblački */
+.bubble{position:relative;border:4px solid var(--ink);border-radius:18px;padding:12px 16px;background:#fff;box-shadow:5px 5px 0 var(--ink)}
+.bubble.good{background:#c9f5da}.bubble.bad{background:#ffe1c7}
+.bubble h3{font-size:1.35rem;font-weight:800}
+.bubble .fact{margin-top:8px}
+.bubble .ans{margin-top:6px;font-weight:800}
+.bonus{display:inline-block;background:var(--yellow);border:3px solid var(--ink);border-radius:8px;padding:0 8px;font-weight:800;margin-top:6px;transform:rotate(-2deg)}
+
+/* Čin */
+.rankcard{display:flex;gap:14px;align-items:center}
+.bar{height:20px;border:4px solid var(--ink);border-radius:999px;background:#fff;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--red);border-right:4px solid var(--ink)}
+.bar.g i{background:var(--green)}
+.rk{display:flex;align-items:center;gap:12px;padding:8px 12px;border:4px solid var(--ink);border-radius:14px;background:#fff}
+.rk.lock{opacity:.55;background:#eee}
+.rk.cur{background:var(--yellow);box-shadow:4px 4px 0 var(--ink)}
+.rk b{font-size:1.2rem}
+
+/* Teme */
+.topics{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.topic{font:inherit;text-align:left;border:4px solid var(--ink);border-radius:14px;padding:10px 12px;box-shadow:4px 4px 0 var(--ink);cursor:pointer;display:flex;flex-direction:column;gap:6px;touch-action:manipulation}
+.topic:active{transform:translate(3px,3px);box-shadow:1px 1px 0 var(--ink)}
+.topic b{font-size:1.15rem;font-weight:800}
+.topic small{font-size:.9rem;font-weight:700}
+.topic .bar{height:14px;border-width:3px;background:rgba(255,255,255,.85)}
+.topic .bar i{background:var(--ink);border-right:0}
+
+/* Obrazci */
+input[type=text]{font:inherit;font-weight:700;font-size:1.15rem;padding:9px 12px;border:4px solid var(--ink);border-radius:12px;background:#fff;color:var(--ink);width:100%;min-width:0}
+textarea{font:inherit;font-weight:600;font-size:1rem;padding:9px 12px;border:4px solid var(--ink);border-radius:12px;background:#fff;color:var(--ink);width:100%;min-height:140px;resize:vertical}
+label{font-weight:800;display:block;margin-bottom:4px}
+.seg{display:flex;gap:8px}
+.seg .btn{flex:1;box-shadow:3px 3px 0 var(--ink);padding:8px}
+.seg .btn.on{background:var(--red);color:#fff}
+.note{font-size:.95rem;font-weight:500;opacity:.85}
+.stars{font-size:3rem;line-height:1;letter-spacing:4px;-webkit-text-stroke:3px var(--ink);paint-order:stroke fill;text-align:center}
+.stars .on{color:var(--yellow)}.stars .off{color:#fff}
+.center{text-align:center}
+.list{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:8px}
+.list li{border:3px solid var(--ink);border-radius:12px;padding:8px 12px;background:#fff}
+.medal{display:inline-grid;place-items:center;width:30px;height:30px;border-radius:50%;border:3px solid var(--ink);background:var(--yellow);font-weight:800;margin-right:8px}
+.codebox{display:flex;gap:8px}
+.status{min-height:1.4em;font-weight:700;color:var(--green)}
+.ep{display:block;flex:none}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+
+@media (prefers-reduced-motion:reduce){
+  *{animation:none!important;transition:none!important}
+  .fl.anim{transform:translate(290px,152px) scale(var(--to,1))}
+}
+</style>
+</head>
+<body>
+<noscript><div class="wrap"><div class="panel">Za igro potrebuješ vklopljen JavaScript.</div></div></noscript>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs>
+<linearGradient id="gSky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8fd0ff"/><stop offset="1" stop-color="#e8f7ff"/></linearGradient>
+<linearGradient id="gSkyW" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffd27a"/><stop offset="1" stop-color="#fff4d4"/></linearGradient>
+<linearGradient id="gJ" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#4a9af2"/><stop offset="1" stop-color="#1459b3"/></linearGradient>
+<linearGradient id="gH" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ff6a4d"/><stop offset="1" stop-color="#c91f0e"/></linearGradient>
+<radialGradient id="gSk" cx=".4" cy=".35" r=".85"><stop offset="0" stop-color="#ffe6cb"/><stop offset="1" stop-color="#f0b387"/></radialGradient>
+<linearGradient id="gF" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="#ffb21f"/><stop offset=".5" stop-color="#ff6a1a"/><stop offset="1" stop-color="#ee2b12"/></linearGradient>
+<linearGradient id="gF2" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="#fff6b8"/><stop offset="1" stop-color="#ffcf30"/></linearGradient>
+<linearGradient id="gHill" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#9be8ae"/><stop offset="1" stop-color="#4fbf78"/></linearGradient>
+</defs></svg>
+<div class="wrap" id="app"></div>
+<script>
+/* Vprašanja: [tema, vprašanje, pravilni odgovor, [napačna1, napačna2], "Zapomni si"] */
+const RAW = [
+/* ---------- GASILSTVO (Veš – ne veš) ---------- */
+["g","Koliko let imajo pionirji gasilci?","Od 7 do 11 let",["Od 3 do 5 let","Od 12 do 16 let"],"Pionirji so stari od 7 do 11 let. Mladinci pa od 12 do 16 let."],
+["g","Koliko let imajo mladinci gasilci?","Od 12 do 16 let",["Od 7 do 11 let","Od 20 do 30 let"],"Mladinci imajo od 12 do 16 let. Ko odrasteš, postaneš pripravnik."],
+["g","Kdo je gasilec pripravnik?","Član društva, star od 16 do 18 let, ki se uči za gasilca",["Član društva, star 5 let","Gasilec, ki je že v pokoju"],"Pripravnik je lahko tudi starejši od 18 let, dokler se še usposablja za operativnega gasilca."],
+["g","Ali lahko tujec postane član prostovoljnega gasilskega društva (PGD)?","Da, pod enakimi pogoji kot Slovenci",["Ne, nikoli","Samo če ima gasilski avto"],"Gasilci pomagamo vsem. Tudi član društva lahko postane vsak, ki izpolnjuje pogoje."],
+["g","Kaj je simbol prostovoljnega gasilstva?","Gasilski znak in prapor",["Čebela in panj","Zastava s sladoledom"],"Simbola sta gasilski znak in prapor."],
+["g","Katera od teh je naravna nesreča?","Potres",["Pokvarjen likalnik","Prazen hladilnik"],"Naravne nesreče so potres, poplava, neurje, zmrzal, suša, plazovi, toča, vihar, žled in kužne bolezni."],
+["g","Katera od teh je naravna nesreča?","Poplava",["Šolski odmor","Pokvarjen telefon"],"Poplava je naravna nesreča. Prav tako potres, suša, toča in žled."],
+["g","Zakaj se ob potresu ne smemo zadrževati na stopnišču?","Ker se lahko zruši",["Ker je tam prehladno","Ker se tam izgubimo"],"Stopnišče se ob potresu rado poruši, zato ga ne uporabljamo za skrivališče."],
+["g","Katero številko pokličemo, ko vidimo, da gori?","112",["113","123"],"Ko gori, pokliči 112!"],
+["g","Kaj povemo, ko pokličemo 112?","Kdo kliče, kaj se je zgodilo, kje in koliko je ponesrečencev",["Samo svoje ime in razred","Kaj smo jedli za kosilo"],"Povej še, kakšne so poškodbe, kakšne so razmere na kraju in kakšno pomoč potrebuješ."],
+["g","Kateri trije deli sestavljajo trikotnik gorenja?","Gorljiva snov, kisik in toplota",["Voda, zrak in zemlja","Les, papir in sladkor"],"Če odvzameš enega od treh, ogenj ugasne."],
+["g","Kaj je gorljiva snov?","Snov, ki gori",["Snov, ki se topi v vodi","Snov, ki je vedno mokra"],"Gorljiva je vsaka snov, ki gori, kadar so izpolnjeni pogoji za gorenje."],
+["g","V katerih stanjih so lahko gorljive snovi?","V trdnem, tekočem in plinastem",["Samo v trdnem","Samo v tekočem"],"Gori lahko les (trdno), bencin (tekoče) in plin (plinasto)."],
+["g","Kateri gospodinjski aparati najpogosteje povzročijo požar?","Pokvarjeni električni aparati, na primer likalnik ali kuhalnik",["Aparati, ki so izklopljeni iz vtičnice","Papirnata vrečka"],"Najbolj nevarni so električni aparati v okvari: kuhalnik, likalnik, električne peči."],
+["g","Koga najprej umaknemo iz gorečega stanovanja?","Ljudi in živali",["Televizijo","Pohištvo"],"Življenja so vedno pomembnejša od stvari!"],
+["g","Kako razvrščamo požare glede na obseg?","Mali, večji, veliki in katastrofalni",["Rdeči, modri in zeleni","Kratki, dolgi in široki"],"Po obsegu so požari mali, večji, veliki in katastrofalni."],
+["g","Kako delimo požare glede na kraj gorenja?","Notranji, zunanji, kombinirani in požari v naravi",["Dnevni in nočni","Hladni in topli"],"Požar je lahko v stavbi (notranji), zunaj, kombiniran ali v naravi."],
+["g","Koliko razredov požarov poznamo?","Štiri: A, B, C in D",["Dva: A in B","Deset"],"Razredi požarov so A, B, C in D. Razred je odvisen od tega, kaj gori."],
+["g","Požari razreda A so požari ...","trdnih snovi (les, seno, obleka)",["tekočin (bencin, olje)","plinov (propan, butan)"],"A kot „Aaa, les gori!“ Razred A so trdne snovi."],
+["g","Požari razreda B so požari ...","tekočin (bencin, olje, nafta, alkohol)",["trdnih snovi (les, seno)","lahkih kovin (aluminij)"],"B kot „bencin“. Razred B so gorljive tekočine."],
+["g","Požari razreda C so požari ...","gorljivih plinov (zemeljski plin, propan, butan)",["tekočin (bencin, olje)","trdnih snovi (les, seno)"],"Razred C so plini: zemeljski plin ali metan, propan, butan, vodik, acetilen, amonijak."],
+["g","Požari razreda D so požari ...","lahkih kovin (aluminij, magnezij)",["plinov (propan, butan)","trdnih snovi (les, seno)"],"Razred D so lahke kovine, na primer aluminij in magnezij."],
+["g","Katero gasilno sredstvo je najcenejše in najbolj razširjeno?","Voda",["Mleko","Sok"],"Voda je najcenejše gasilno sredstvo, zato jo gasilci uporabljajo najpogosteje."],
+["g","Kako delimo gasilske cevi glede na premer?","A, B, C in D",["S, M, L in XL","1, 2, 3 in 4"],"Po premeru so cevi A, B, C in D."],
+["g","Katere vrste gasilskih cevi poznamo?","Sesalne, tlačne in visokotlačne",["Mokre, suhe in sladke","Dolge, kratke in okrogle"],"Sesalne, tlačne in visokotlačne cevi."],
+["g","Za kaj uporabljamo gasilske spojke?","Za spajanje cevi in gasilskih armatur",["Za pripenjanje čelade","Za zapenjanje jakne"],"Spojke spajajo sesalne in tlačne cevi ter armature, na primer ročnik in trojak."],
+["g","Kaj je gasilski prapor?","Simbol društva iz svilene tkanine z zlato vrvico",["Gasilska piščalka","Vrsta gasilne cevi"],"Prapor ima izvezene simbole društva. Uporabljamo ga ob svečanih dogodkih in za predstavitev društva."],
+["g","Koliko pionirjev tekmuje pri vaji z vedrovko?","Devet",["Pet","Dvanajst"],"Pri vedrovki tekmuje devet pionirjev."],
+["g","Kako imenujemo tekmovalce z rumenimi oznakami pri vedrovki?","Cevarji",["Napadalci","Vodarji"],"Rumeni so cevarji, rdeči napadalci, modri vodarji."],
+["g","Kako imenujemo tekmovalce z rdečimi oznakami pri vedrovki?","Napadalci",["Cevarji","Vodarji"],"Rdeči so napadalci. Rumeni so cevarji, modri vodarji."],
+["g","Kako imenujemo tekmovalce z modrimi oznakami pri vedrovki?","Vodarji",["Cevarji","Napadalci"],"Modra kot voda. Modri so vodarji."],
+["g","Koliko vode je v enem vedru pri vedrovki?","5 litrov",["1 liter","20 litrov"],"V enem vedru je 5 litrov vode."],
+["g","Katero povelje zakliče tekmovalec, ki z mlazom meri v tarčo pri vedrovki?","„Voda!“",["„Ogenj!“","„Stoj!“"],"Tisti, ki meri s curkom v tarčo, zakliče: „Voda!“"],
+["g","Kako morajo biti oblečeni tekmovalci pri kvizu?","V gasilsko delovno obleko",["V pižamo","V kopalke"],"Tekmovalci nosijo gasilsko delovno obleko."],
+["g","Kakšen ročnik predajajo pionirji pri štafeti?","Navadni D-ročnik",["Zlati ročnik","Gasilno cev"],"Pri štafeti pionirji predajajo navadni D-ročnik."],
+["g","Koliko gasilskih regij je v Sloveniji?","17",["5","50"],"V Sloveniji je 17 gasilskih regij."],
+["g","Kdo voli poveljnika in predsednika PGD?","Občni zbor",["Župan","Dežurni kuhar"],"Poveljnika in predsednika društva izvoli občni zbor."],
+["g","Kako je organizirano gasilstvo v Sloveniji?","V prostovoljnih in poklicnih gasilskih organizacijah",["Samo v poklicnih","Samo v šolah"],"Imamo prostovoljne in poklicne gasilce."],
+["g","Koliko prostovoljnih gasilskih društev je v Sloveniji?","Okoli 1300",["Okoli 13","Okoli 130 000"],"V Sloveniji je okoli 1300 prostovoljnih gasilskih društev."],
+["g","Kje registriramo gasilsko društvo?","Na upravni enoti",["V trgovini","Na pošti"],"Gasilsko društvo registriramo na upravni enoti."],
+["g","Kje na gasilski uniformi nosimo oznake činov?","Na naramniku",["Na čeladi","Na čevljih"],"Čin se vidi na naramniku."],
+["g","Na katerem rokavu delovne obleke nosimo znak gasilske organizacije?","Na levem",["Na desnem","Na čeladi"],"Znak pripadnosti gasilski organizaciji je na levem rokavu."],
+["g","Kako gasilci pozdravljajo?","Z roko in z obračanjem glave",["S klobukom","Z mahanjem z obema rokama"],"Gasilski pozdrav: roka in obrat glave."],
+["g","S katero nogo začnemo premikanje pri vaji razvrščanja?","Z levo nogo",["Z desno nogo","Z obema hkrati"],"Pri razvrščanju začnemo z levo nogo."],
+["g","Katere vrste radijskih postaj poznamo?","Ročne, mobilne in stabilne",["Rdeče, modre in zelene","Hitre in počasne"],"Radijske postaje so ročne, mobilne in stabilne."],
+["g","Kako se imenuje informacijski sistem za evidence prostovoljnih gasilcev?","Vulkan",["Orkan","Strela"],"Gasilske evidence vodimo v sistemu Vulkan."],
+["g","Kaj je evakuacija?","Organiziran umik ljudi na varno mesto",["Gašenje s helikopterjem","Vaja z vedrovko"],"Evakuacija je organiziran umik ljudi na varno mesto ob požaru ali drugi nevarnosti."],
+["g","Kaj pomeni črka X na opozorilni tabli vozila?","Snov nevarno reagira z vodo",["Snov je zelo težka","Snov je zelo hladna"],"X pomeni: ne gasi z vodo!"],
+["g","Koliko časa je potrebna požarna straža?","Dokler je prisotna požarna nevarnost",["Točno eno uro","Do kosila"],"Požarna straža bdi, dokler obstaja nevarnost požara."],
+["g","S čim lahko gasimo katastrofalni požar v naravi?","S helikopterji in letali, ki prevažajo vodo",["S sesalcem","S snežnimi kepami"],"Veliki požari v naravi se gasijo tudi iz zraka."],
+["g","Kdo je v društvu odgovoren za delo z gasilsko mladino?","Mentor gasilske mladine",["Župan","Dežurni kuhar"],"Z mladimi gasilci dela mentor gasilske mladine."],
+["g","Kaj je gasilnik ali gasilni aparat?","Naprava za gašenje začetnih požarov",["Naprava za sušenje las","Čelada z lučjo"],"Z gasilnikom pogasimo požar, ko je še majhen."],
+
+/* ---------- PRVA POMOČ ---------- */
+["p","Kaj je prva pomoč?","Ukrepi, s katerimi pomagamo poškodovanemu, preden pridejo reševalci",["Zdravljenje v bolnišnici","Nakup zdravil v lekarni"],"Prvo pomoč nudimo pred prihodom reševalcev."],
+["p","Kaj potrebujemo za prvo pomoč?","Preproste pripomočke, na primer torbico prve pomoči",["Veliko zdravil in injekcij","Reševalni avto"],"Pogosto moramo tudi improvizirati, to pomeni, da si pomagamo s tem, kar imamo."],
+["p","Kako dolgo nudimo prvo pomoč?","Do prihoda ekipe nujne medicinske pomoči ali do menjave",["Pet minut","Dokler nam ni dolgčas"],"Pomagamo, dokler ne pridejo reševalci, dokler ne dobimo menjave ali dokler ne omagamo."],
+["p","Katero številko pokličemo, kadar potrebujemo reševalce?","112",["113","123"],"Za reševalce kličemo 112!"],
+["p","Kateri podatki so pomembni, ko kličemo nujno medicinsko pomoč?","Kdo kliče, kaj se je zgodilo, kje, koliko je poškodovanih in kakšne so poškodbe",["Kakšne barve je reševalni avto","Kateri je naš najljubši film"],"Povej tudi razmere na kraju in kakšno pomoč potrebuješ."],
+["p","Kaj naredimo najprej, preden pristopimo do ponesrečenca?","Poskrbimo za svojo varnost",["Takoj stečemo k njemu","Naredimo fotografijo"],"Poskrbi za svojo varnost, za varnost poškodovanca in za varnost vseh, ki so tam."],
+["p","Kako ugotovimo, ali je poškodovanec pri zavesti?","Primemo ga za ramena, ga nežno stresemo in glasno ogovorimo",["Močno ga poščegetamo","Pustimo ga pri miru"],"Za ramena, nežno stresanje in glasen poziv."],
+["p","Kaj naredimo, ko nekdo omedli?","Poležemo ga, mu dvignemo noge in omogočimo svež zrak",["Posadimo ga na stol","Obrnemo ga na glavo"],"Odpnemo mu ovratnik in razrahljamo pas."],
+["p","Kako se imenuje položaj za nezavestnega?","Stabilni bočni položaj",["Stabilni hrbtni položaj","Položaj leteče ptice"],"Nezavestnega, ki diha, položimo v stabilni bočni položaj."],
+["p","Kakšno je razmerje pri oživljanju odraslih?","30 masaž in 2 vpiha",["2 masaži in 30 vpihov","10 masaž in 10 vpihov"],"Pri oživljanju odraslih: 30 masaž srca in 2 vpiha."],
+["p","S čim se zaščitimo pri oživljanju?","Z obrazno masko",["S smučarsko masko","S kapo"],"Pri vpihih uporabimo obrazno masko."],
+["p","Če ne znaš dati vpihov, kaj narediš pri osebi, ki ne diha?","Izvajamo neprekinjeno masažo srca",["Počakamo, da se sama zbudi","Damo ji piti vodo"],"Če nočeš ali ne znaš dati vpihov, masiraj srce brez prekinitve."],
+["p","Kaj naredimo, če ima nekdo lažjo zaporo dihalne poti (se mu zaleti)?","Spodbujamo ga, da se odkašlja",["Damo mu piti","Postavimo ga na glavo"],"Kašelj je najboljše zdravilo za zaleteno hrano."],
+["p","Kako pravilno shranjujemo zdravila?","Na hladnem in temnem, izven dosega otrok",["Na sončnem oknu","Na tleh v otroški sobi"],"Zdravila shranimo, na primer, na višji polici v omari."],
+["p","Zakaj je nevaren skok na glavo v plitvo vodo?","Ker se lahko poškodujeta hrbtenica in glava",["Ker je voda mokra","Ker se zmočijo lasje"],"V plitvo vodo nikoli ne skači na glavo."],
+["p","Za kaj uporabljamo trikotne rute?","Za obveze, imobilizacijo in začasno ustavitev krvavitve",["Za pokrivanje glave pri soncu","Za brisanje tal"],"Trikotna ruta je zelo uporabna: obveza, imobilizacija in ustavljanje krvavitve."],
+["p","Kaj dosežemo z imobilizacijo?","Poškodovani del telesa se ne premika",["Poškodovani del se hitreje premika","Poškodovani del se ohladi"],"Imobilizacija pomeni: mirujoč poškodovani del."],
+["p","S čim pokrijemo vsako rano?","S sterilno gazo",["Z blatom","Z mokrim papirjem"],"Vsako rano pokrijemo s sterilno gazo."],
+["p","Kako oskrbimo manjše poškodbe, na primer vrezninico na prstu?","Rano operemo s čisto vodo in nanjo namestimo obliž",["Rano zalijemo s sokom","Rano pustimo odprto"],"Čista voda in obliž."],
+["p","Kako oskrbimo rano zaradi ugriza živali?","Obrišemo slino, rano speremo in obvežemo ter gremo k zdravniku",["Rano pustimo, da se posuši","Rano ovijemo v papir"],"Pri ugrizu vedno k zdravniku!"],
+["p","Kako ustavimo krvavitev iz nosu?","Oseba sede, se nagne naprej in stisne nosnici",["Oseba leže vrže glavo nazaj","Oseba teče po stopnicah"],"Na tilnik lahko položimo hladen obkladek."],
+["p","Ali lahko osebo s poškodovano hrbtenico premikamo?","Samo če je neposredno ogrožena, na primer zaradi ognja",["Da, vedno takoj","Ne, nikoli, niti v ognju"],"Hrbtenice ne premikamo, razen če je oseba neposredno ogrožena."],
+["p","Kako se imenuje pripomoček za oskrbo opeklin?","Opeklinski obkladek",["Opeklinska zavesa","Opeklinski ščit"],"Opekline oskrbimo z opeklinskim obkladkom."],
+["p","Kako se imenuje postopek razvrščanja poškodovanih glede na težo poškodbe in nujnost oskrbe?","Triaža",["Triatlon","Tropikalna"],"Triaža razvrsti poškodovane po tem, kdo najprej potrebuje pomoč."],
+["p","Kdo je triažer?","Oseba, ki izvaja triažo",["Oseba, ki vozi reševalni avto","Oseba, ki prodaja zdravila"],"Triažer razvršča poškodovane."],
+["p","S katerimi barvami označujemo triažne skupine?","Rdeča, rumena, zelena in črna",["Bela, roza, siva in oranžna","Modra, vijolična in rjava"],"Triažne barve: rdeča, rumena, zelena in črna."],
+["p","Kako označujemo poškodovane pri triaži?","S posebnimi triažnimi kartončki",["S samolepilnimi nalepkami z živalmi","S pisanjem po roki"],"Poškodovane označimo s triažnimi kartončki."],
+["p","Kaj je najpogostejši način zaustavljanja večjih krvavitev?","Kompresijska obveza",["Mokra brisača","Poljub in obliž"],"Večjo krvavitev ustavimo s kompresijsko obvezo."],
+["p","Kaj pomeni kratica AED?","Avtomatski eksterni defibrilator",["Avtomatski električni drsnik","Aparat za enostavno dihanje"],"AED je naprava, ki pomaga pri oživljanju in ti pove, kaj naj narediš."],
+
+/* ---------- ZGODOVINA ---------- */
+["z","Kje je bilo ustanovljeno prvo gasilsko društvo?","V Metliki",["V Ljubljani","V Mariboru"],"Prvo prostovoljno gasilsko društvo je nastalo v Metliki."],
+["z","Kako so se ob ustanovitvi imenovala najstarejša gasilska društva v Sloveniji?","Požarne brambe",["Ognjene straže","Vodne čete"],"Požarna bramba je bilo staro ime za gasilsko društvo."],
+["z","Katerega leta je bila ustanovljena prva prostovoljna požarna bramba na Slovenskem?","1869",["1769","1969"],"Leto 1869: prva prostovoljna požarna bramba v Metliki."],
+["z","Kdo je bil ustanovitelj najstarejšega gasilskega društva v Sloveniji?","Dr. Josip Savinšek",["Janez Novak","Anton Plamen"],"Dr. Josip Savinšek je ustanovil prvo gasilsko društvo v Metliki."],
+["z","Kdo je bil prvi predsednik Gasilske zveze Slovenije?","Matevž Hace",["Janez Novak","Anton Plamen"],"Po Matevžu Hacetu se imenuje tudi najvišje gasilsko priznanje."],
+["z","Kje je bila v Sloveniji ustanovljena prva gasilska šola?","V Žireh",["V Metliki","V Kopru"],"Prva gasilska šola je bila v Žireh."],
+["z","Kje je Slovenski gasilski muzej?","V Metliki",["V Žireh","V Celju"],"Gasilski muzej je v Metliki, kjer je nastalo tudi prvo društvo."],
+["z","Kdo je zavetnik gasilcev?","Sveti Florjan",["Sveti Miklavž","Sveti Martin"],"Svetega Florjana gasilci častijo kot svojega zavetnika."]
+];
+
+/* ---------- VEŠČINE (znaki za pionirje in mladince) ---------- */
+const SVG_CROSS = '<svg viewBox="0 0 40 40" width="46" height="46" aria-hidden="true"><path d="M15 4h10v11h11v10H25v11H15V25H4V15h11z" fill="#e5321f" stroke="#1b1830" stroke-width="3" stroke-linejoin="round"/></svg>';
+const SVG_SIGN = '<svg viewBox="0 0 40 40" width="46" height="46" aria-hidden="true"><rect x="18" y="3" width="4" height="35" fill="#8a6a3b" stroke="#1b1830" stroke-width="2"/><path d="M6 7h24l5 4-5 4H6z" fill="#ffcf30" stroke="#1b1830" stroke-width="2.5" stroke-linejoin="round"/><path d="M34 20H10l-5 4 5 4h24z" fill="#fff" stroke="#1b1830" stroke-width="2.5" stroke-linejoin="round"/></svg>';
+const VESC = [
+  ["Kolesar","🚴","pionirje"],["Plavalec","🏊","pionirje"],["Preventivec","🔥❌","pionirje"],
+  ["Kurir","✉️","mladince"],["Arhivar","📖","mladince"],["Likovnik","🎨","mladince"],
+  ["Naravoslovec gozdar","🌳","mladince"],["Računalničar","@","mladince"],["Bolničar",SVG_CROSS,"mladince"],
+  ["Vodič",SVG_SIGN,"mladince"],["Novinar fotograf","📷","mladince"],["Glasbenik","🎵","mladince"]
+];
+VESC.forEach(function(v,i){
+  RAW.push(["v","Katero veščino prikazuje ta znak?",v[0],[VESC[(i+3)%12][0],VESC[(i+7)%12][0]],
+    v[0]+" je veščina za "+v[2]+". Vseh 12 veščin morajo poznati pionirji in mladinci.",v[1]]);
+});
+
+</script>
+<script>
+(function(){
+'use strict';
+
+/* ================= PODATKI ================= */
+var TOPICS={
+  g:{n:'Gasilstvo',bg:'var(--red)',fg:'#fff'},
+  p:{n:'Prva pomoč',bg:'var(--green)',fg:'#fff'},
+  z:{n:'Zgodovina',bg:'var(--yellow)',fg:'var(--ink)'},
+  v:{n:'Veščine',bg:'var(--blue)',fg:'#fff'}
+};
+var QS=[]; (function(){
+  var c={g:0,p:0,z:0,v:0};
+  RAW.forEach(function(r){ c[r[0]]++; QS.push({id:r[0]+c[r[0]],t:r[0],q:r[1],right:r[2],wrong:r[3],fact:r[4],icon:r[5]||''}); });
+})();
+function poolOf(t){ return t==='all'?QS:QS.filter(function(q){return q.t===t}); }
+
+/* Čini so igra, ne uradna lestvica. */
+/* Znaki po standardu kakovosti za čine (Gasilska zveza Slovenije): obroba, trak, plamenice, lipovi listi. */
+var C={blue:'#3b8be0',red:'#e5321f',silver:'#c9d0da',gold:'#f2b705',orange:'#ff8a1f'};
+var RG=[
+ {n:'Pionir',bd:'blue',st:'orange',fc:null,lf:0,sw:[10],lv:false},
+ {n:'Mladinec',bd:'blue',st:'orange',fc:null,lf:0,sw:[10,10],lv:false},
+ {n:'Gasilec pripravnik',bd:'red',st:'red',fc:null,lf:0,sw:[10],lv:false},
+ {n:'Gasilec',bd:'red',st:'red',fc:'red',lf:0,sw:[10],lv:true},
+ {n:'Višji gasilec',bd:'silver',st:'red',fc:'red',lf:0,sw:[10],lv:true},
+ {n:'Nižji gasilski častnik',bd:'silver',st:'silver',fc:'silver',lf:0,sw:[10],lv:true},
+ {n:'Gasilski častnik',bd:'gold',st:'gold',fc:'gold',lf:0,sw:[10],lv:true},
+ {n:'Višji gasilski častnik',bd:'gold',st:'gold',fc:'gold',lf:1,sw:[15],lv:true},
+ {n:'Visoki gasilski častnik',bd:'gold',st:'gold',fc:'gold',lf:2,sw:[19],lv:true}];
+var RX=[0,5,12,20,30,42,56,72,90,110,132,156,182,210,240,272,306,342,380,420,462];
+var RANKS=[];(function(){var k=0;RG.forEach(function(g,gi){var n=g.lv?3:1;for(var s=0;s<n;s++){RANKS.push({g:gi,s:s,x:RX[k++],n:g.n+(g.lv&&s?(' '+(s===1?'I.':'II.')+' stopnje'):''),bd:g.bd,st:g.st,fc:g.fc,fl:g.lv?s+1:0,lf:g.lf,sw:g.sw})}})})();
+function rankIdx(x){var r=0;RANKS.forEach(function(k,i){if(x>=k.x)r=i});return r}
+
+var PRAISE=['Bravo!','Odlično!','Pravilno!','Super gasilec!','Tako se dela!','Točno tako!','Ogenj se umika!'];
+var BOOMS=['PRŠ!','ŠUM!','BUM!','JUHU!','HURA!','ŠPLAF!'];
+var OOPS=['Ojoj! Skoraj!','Ups!','Nič hudega!','Hihi, to je težko!','Še malo!'];
+var ADJ=['Pogumni','Hitri','Močni','Veseli','Zlati','Bistri','Vrli','Spretni'];
+var NOUN=['Hidrant','Ročnik','Dalmatinec','Čelada','Brizgalka','Gasilnik','Lestev','Plamenček'];
+var CODES=['PLAMEN','HIDRANT','LESTEV','SIRENA','CELADA','ROCNIK','FLORJAN','METLIKA'];
+var TEAMCOL=['var(--red)','var(--blue)','var(--green)','var(--orange)'];
+
+/* ================= SHRANJEVANJE ================= */
+var KEY='gasilska-akademija-v1';
+var S={nick:'',xp:0,q:{},duel:{},snd:true,paste:''};
+try{var raw=localStorage.getItem(KEY); if(raw){S=Object.assign(S,JSON.parse(raw));}}catch(e){}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}}
+function nick(){return S.nick&&S.nick.trim()?S.nick.trim():'Gasilec'}
+
+/* ================= POMOŽNE ================= */
+function esc(s){return String(s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
+function hash(s){var h=2166136261;for(var i=0;i<s.length;i++){h^=s.charCodeAt(i);h=Math.imul(h,16777619)}return h>>>0}
+function mulberry(a){return function(){a|=0;a=a+0x6D2B79F5|0;var t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+function shuffle(arr,rnd){var a=arr.slice();for(var i=a.length-1;i>0;i--){var j=Math.floor(rnd()*(i+1));var t=a[i];a[i]=a[j];a[j]=t}return a}
+function rpick(a){return a[Math.floor(Math.random()*a.length)]}
+function weightOf(q){var s=S.q[q.id];if(!s)return 3;return [4,2,1,.35,.35,.35][Math.min(s.box,5)]}
+function pick(pool,n,rnd,wf){
+  pool=pool.slice();var out=[];
+  while(out.length<n&&pool.length){
+    var tot=0,w=pool.map(function(q){var x=wf?wf(q):1;tot+=x;return x});
+    var r=rnd()*tot,k=0;
+    for(;k<pool.length-1;k++){r-=w[k];if(r<=0)break}
+    out.push(pool.splice(k,1)[0]);
+  }
+  return out;
+}
+function makeItem(q,rnd,retry){
+  var opts=shuffle([q.right].concat(q.wrong),rnd);
+  return {q:q,opts:opts,ci:opts.indexOf(q.right),retry:!!retry};
+}
+function mastered(t){var p=poolOf(t);return p.filter(function(q){var s=S.q[q.id];return s&&s.box>=3}).length}
+
+/* ================= ZVOK IN GLAS ================= */
+var AC=null;
+function beep(ok){
+  if(!S.snd)return;
+  try{
+    AC=AC||new (window.AudioContext||window.webkitAudioContext)();
+    var o=AC.createOscillator(),g=AC.createGain();o.connect(g);g.connect(AC.destination);
+    var t=AC.currentTime;o.type='triangle';
+    if(ok){o.frequency.setValueAtTime(523,t);o.frequency.setValueAtTime(784,t+.12)}
+    else{o.frequency.setValueAtTime(240,t);o.frequency.linearRampToValueAtTime(150,t+.25)}
+    g.gain.setValueAtTime(.16,t);g.gain.exponentialRampToValueAtTime(.001,t+.32);
+    o.start(t);o.stop(t+.34);
+  }catch(e){}
+}
+function slVoice(){try{return speechSynthesis.getVoices().filter(function(v){return /^sl/i.test(v.lang)})[0]||null}catch(e){return null}}
+function speak(text){
+  var v=slVoice();if(!v)return;
+  try{speechSynthesis.cancel();var u=new SpeechSynthesisUtterance(text);u.voice=v;u.lang=v.lang;u.rate=.9;speechSynthesis.speak(u)}catch(e){}
+}
+
+/* ================= RISANKE ================= */
+function leaf(cx,cy,col){return '<g transform="translate('+cx+','+cy+')"><path d="M0-4.5V-8.5" stroke="#1b1830" stroke-width="1.8" stroke-linecap="round"/><path d="M0 8.5C-3 5.5-9 3.5-8-1.5C-7.2-5.5-2-6.8 0-3.5C2-6.8 7.2-5.5 8-1.5C9 3.5 3 5.5 0 8.5Z" fill="'+col+'" stroke="#1b1830" stroke-width="1.5" stroke-linejoin="round"/><path d="M0-3V6M0 1L-3.5-1.5M0 1L3.5-1.5" stroke="#1b1830" stroke-width="1" opacity=".55" stroke-linecap="round" fill="none"/></g>'}
+function plam(cx,cy,sc,col){return '<g transform="translate('+cx+','+cy+') scale('+sc+')"><path d="M0 7C-5 7-6 2-3-2C-2 0-1 0 0-2C0-5 1-7 2-9C5-5 6-1 5 2C4 5 3 7 0 7Z" fill="'+col+'" stroke="#1b1830" stroke-width="1.5" stroke-linejoin="round"/></g>'}
+function ep(idx,w){
+  var r=RANKS[idx],s='',P='4.5,3 53.5,3 56.5,63 1.5,63',i;
+  s+='<polygon points="'+P+'" fill="#1b1830" stroke="#1b1830" stroke-width="9" stroke-linejoin="round"/>';
+  s+='<polygon points="'+P+'" fill="#1d2f63" stroke="'+C[r.bd]+'" stroke-width="5" stroke-linejoin="round"/>';
+  var y=(r.fl||r.lf)?24:(r.sw.length>1?22:28),bottom=y;
+  r.sw.forEach(function(h){s+='<rect x="6" y="'+y+'" width="46" height="'+h+'" fill="'+C[r.st]+'" stroke="#1b1830" stroke-width="1.4"/>';bottom=y+h;y+=h+6});
+  var lx=r.lf===1?[29]:r.lf===2?[21,37]:[];
+  for(i=0;i<lx.length;i++)s+=leaf(lx[i],14,C.silver);
+  var fx=r.fl===1?[29]:r.fl===2?[21,37]:r.fl===3?[14,29,44]:[];
+  var sc=Math.min(1,(60-bottom-3)/16),cy=(bottom+61)/2;
+  for(i=0;i<fx.length;i++)s+=plam(fx[i],cy,sc.toFixed(2),C[r.fc]);
+  return '<svg class="ep" viewBox="0 0 58 66" width="'+(w||50)+'" height="'+Math.round((w||50)*66/58)+'" aria-hidden="true">'+s+'</svg>';
+}
+/* ---- Gašper ---- */
+function limb(d){return '<path d="'+d+'" fill="none" stroke="#1b1830" stroke-width="17" stroke-linecap="round"/><path d="'+d+'" fill="none" stroke="#2a78d4" stroke-width="10" stroke-linecap="round"/><path d="'+d+'" fill="none" stroke="#6fb0f5" stroke-width="3" stroke-linecap="round" transform="translate(-2,-2)" opacity=".7"/>'}
+function hand(x,y){return '<circle cx="'+x+'" cy="'+y+'" r="8" fill="url(#gSk)" stroke="#1b1830" stroke-width="3.5"/>'}
+function nozzle(x1,y1,x2,y2){return '<path d="M'+x1+' '+y1+'L'+x2+' '+y2+'" stroke="#1b1830" stroke-width="16" stroke-linecap="round"/><path d="M'+x1+' '+y1+'L'+x2+' '+y2+'" stroke="#ffcf30" stroke-width="10" stroke-linecap="round"/><path d="M'+x1+' '+(y1-3)+'L'+(x2-4)+' '+(y2-3)+'" stroke="#fff6b0" stroke-width="2.5" stroke-linecap="round"/><circle cx="'+x2+'" cy="'+y2+'" r="5" fill="#e5321f" stroke="#1b1830" stroke-width="3"/>'}
+function gasper(mood){
+  var sad=mood==='sad',cheer=mood==='cheer',s='';
+  var hose=sad?'M104 142C114 154 100 160 90 160C60 166 30 166 4 158':'M125 93C142 108 132 150 98 158C66 166 30 166 4 158';
+  s+='<ellipse cx="66" cy="164" rx="50" ry="5" fill="rgba(27,24,48,.2)"/>';
+  s+='<path d="'+hose+'" fill="none" stroke="#1b1830" stroke-width="14" stroke-linecap="round"/><path d="'+hose+'" fill="none" stroke="#f2b705" stroke-width="8" stroke-linecap="round"/><path d="'+hose+'" fill="none" stroke="#ffe27a" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="3 9" transform="translate(-1,-2)"/>';
+  /* noge in škornji */
+  s+='<rect x="38" y="142" width="26" height="18" rx="3" fill="#1d3f7a" stroke="#1b1830" stroke-width="4"/><rect x="68" y="142" width="26" height="18" rx="3" fill="#1d3f7a" stroke="#1b1830" stroke-width="4"/>';
+  s+='<rect x="38" y="150" width="26" height="5" fill="#ffcf30" stroke="#1b1830" stroke-width="2"/><rect x="68" y="150" width="26" height="5" fill="#ffcf30" stroke="#1b1830" stroke-width="2"/>';
+  s+='<rect x="33" y="157" width="34" height="9" rx="4.5" fill="#2b2740" stroke="#1b1830" stroke-width="4"/><rect x="65" y="157" width="34" height="9" rx="4.5" fill="#2b2740" stroke="#1b1830" stroke-width="4"/>';
+  /* telo */
+  s+='<path d="M32 102C32 90 44 86 66 86C88 86 100 90 100 102L102 142C102 146 98 148 94 148H38C34 148 30 146 30 142Z" fill="url(#gJ)" stroke="#1b1830" stroke-width="4" stroke-linejoin="round"/>';
+  s+='<path d="M31 114H101V122H31Z" fill="#ffcf30" stroke="#1b1830" stroke-width="2.5"/><path d="M30.5 128H101.5V134H30.5Z" fill="#ffcf30" stroke="#1b1830" stroke-width="2.5"/>';
+  s+='<path d="M66 90V148" stroke="#1b1830" stroke-width="2.5" opacity=".45"/><path d="M40 96C40 94 46 92 52 92" stroke="#fff" stroke-width="3.5" stroke-linecap="round" opacity=".45" fill="none"/>';
+  s+='<path d="M52 88L66 100L80 88" fill="#1459b3" stroke="#1b1830" stroke-width="3.5" stroke-linejoin="round"/>';
+  /* roke */
+  if(sad){
+    s+=limb('M36 106C28 118 28 130 32 140')+hand(32,142);
+    s+=limb('M96 106C104 118 106 130 104 138')+nozzle(104,140,118,156)+hand(104,141);
+  }else{
+    s+=cheer?limb('M36 106C24 94 18 80 20 66')+hand(20,61):limb('M36 106C26 114 24 124 34 130')+hand(35,131);
+    s+=limb('M96 104C108 106 116 100 124 94')+nozzle(124,93,146,84)+hand(125,93);
+  }
+  /* glava */
+  s+='<circle cx="35" cy="62" r="7" fill="url(#gSk)" stroke="#1b1830" stroke-width="3.5"/><circle cx="97" cy="62" r="7" fill="url(#gSk)" stroke="#1b1830" stroke-width="3.5"/>';
+  s+='<circle cx="66" cy="60" r="30" fill="url(#gSk)" stroke="#1b1830" stroke-width="4"/>';
+  s+='<circle cx="45" cy="74" r="5.5" fill="#ff8f7a" opacity=".55"/><circle cx="87" cy="74" r="5.5" fill="#ff8f7a" opacity=".55"/>';
+  s+='<ellipse cx="55" cy="63" rx="7.5" ry="9" fill="#fff" stroke="#1b1830" stroke-width="3"/><ellipse cx="77" cy="63" rx="7.5" ry="9" fill="#fff" stroke="#1b1830" stroke-width="3"/>';
+  s+='<circle cx="'+(sad?55:58)+'" cy="'+(sad?67:65)+'" r="4.2" fill="#1b1830"/><circle cx="'+(sad?77:80)+'" cy="'+(sad?67:65)+'" r="4.2" fill="#1b1830"/>';
+  s+='<circle cx="'+(sad?56.5:59.5)+'" cy="'+(sad?65:63)+'" r="1.6" fill="#fff"/><circle cx="'+(sad?78.5:81.5)+'" cy="'+(sad?65:63)+'" r="1.6" fill="#fff"/>';
+  s+='<ellipse cx="66" cy="71" rx="3" ry="2.4" fill="#f0a070" stroke="#1b1830" stroke-width="2"/>';
+  if(sad){
+    s+='<path d="M47 56L61 50M85 56L71 50" stroke="#1b1830" stroke-width="4" stroke-linecap="round"/>';
+    s+='<path d="M57 86Q66 77 75 86" fill="none" stroke="#1b1830" stroke-width="4" stroke-linecap="round"/>';
+    s+='<path d="M47 76C43 82 43 86 47 86C51 86 51 82 47 76Z" fill="#6ec1ff" stroke="#1b1830" stroke-width="2"/>';
+  }else{
+    s+='<path d="M47 50Q55 45 63 49M69 49Q77 45 85 50" fill="none" stroke="#1b1830" stroke-width="4" stroke-linecap="round"/>';
+    if(cheer)s+='<path d="M52 77Q66 102 80 77Z" fill="#7a1f2b" stroke="#1b1830" stroke-width="4" stroke-linejoin="round"/><path d="M58 90Q66 84 74 90Q66 96 58 90Z" fill="#ff7a8a"/><path d="M56 78H76" stroke="#fff" stroke-width="4"/>';
+    else s+='<path d="M55 79Q66 94 77 79Z" fill="#7a1f2b" stroke="#1b1830" stroke-width="4" stroke-linejoin="round"/><path d="M57 80H75" stroke="#fff" stroke-width="3.5"/>';
+  }
+  /* čelada */
+  s+='<path d="M34 54C34 18 98 18 98 54Z" fill="url(#gH)" stroke="#1b1830" stroke-width="4" stroke-linejoin="round"/>';
+  s+='<path d="M44 42C48 32 57 27 68 26" fill="none" stroke="#fff" stroke-width="4.5" stroke-linecap="round" opacity=".6"/>';
+  s+='<path d="M56 29h20v16l-10 8-10-8z" fill="#ffcf30" stroke="#1b1830" stroke-width="3.5" stroke-linejoin="round"/><path d="M66 33C62 39 62 43 66 46C70 43 70 39 66 33Z" fill="#e5321f" stroke="#1b1830" stroke-width="2"/>';
+  s+='<rect x="26" y="52" width="80" height="12" rx="6" fill="url(#gH)" stroke="#1b1830" stroke-width="4"/><path d="M34 56H98" stroke="#fff" stroke-width="2.5" opacity=".4" stroke-linecap="round"/>';
+  return s;
+}
+
+/* ---- Iskrica ---- */
+function flame(mood){
+  var arms,eyes,mouth,sp='',i;
+  function arm(d){return '<path d="'+d+'" fill="none" stroke="#1b1830" stroke-width="12" stroke-linecap="round"/><path d="'+d+'" fill="none" stroke="#ff7a1a" stroke-width="6" stroke-linecap="round"/>'}
+  if(mood==='hurt')arms=arm('M-38 -26C-50 -40-48 -56-44 -64')+arm('M38 -26C50 -40 48 -56 44 -64');
+  else if(mood==='laugh')arms=arm('M-38 -22C-52 -24-54 -10-42 -8')+arm('M38 -26C52 -34 58 -46 56 -58');
+  else arms=arm('M-38 -22C-52 -24-54 -10-42 -8')+arm('M38 -22C52 -24 54 -10 42 -8');
+  if(mood==='hurt'){
+    eyes='<path d="M-19 -42l12 12M-7 -42l-12 12M7 -42l12 12M19 -42l-12 12" stroke="#1b1830" stroke-width="4" stroke-linecap="round"/>';
+    mouth='<path d="M-9 -14Q-4 -22 2 -14T14 -14" fill="none" stroke="#1b1830" stroke-width="4" stroke-linecap="round"/>';
+  }else{
+    eyes='<ellipse cx="-12" cy="-35" rx="7.5" ry="9" fill="#fff" stroke="#1b1830" stroke-width="3.2"/><ellipse cx="12" cy="-35" rx="7.5" ry="9" fill="#fff" stroke="#1b1830" stroke-width="3.2"/><circle cx="-10" cy="-33" r="3.8" fill="#1b1830"/><circle cx="14" cy="-33" r="3.8" fill="#1b1830"/><circle cx="-8.8" cy="-35" r="1.4" fill="#fff"/><circle cx="15.2" cy="-35" r="1.4" fill="#fff"/><path d="M-22 -49L-6 -43M22 -49L6 -43" stroke="#1b1830" stroke-width="4" stroke-linecap="round"/>';
+    mouth=mood==='laugh'?'<path d="M-14 -22Q3 4 20 -22Z" fill="#7a1f2b" stroke="#1b1830" stroke-width="4" stroke-linejoin="round"/><path d="M-5 -9Q3 -15 11 -9Q3 -3 -5 -9Z" fill="#ff7a8a"/>':'<path d="M-11 -19Q3 -7 17 -19" fill="none" stroke="#1b1830" stroke-width="4" stroke-linecap="round"/><path d="M-6 -15L-4 -10L-1 -14" fill="#fff" stroke="#1b1830" stroke-width="1.5"/>';
+    var pos=[[-30,-96,-8],[20,-110,10],[40,-80,16]];
+    for(i=0;i<3;i++)sp+='<g transform="translate('+pos[i][0]+','+pos[i][1]+')"><path class="spark" style="--dx:'+pos[i][2]+'px;animation-delay:'+(i*.5)+'s" d="M0-5L1.5-1.5L5 0L1.5 1.5L0 5L-1.5 1.5L-5 0L-1.5-1.5Z"/></g>';
+  }
+  return arms+
+    '<path d="M0 0C-40 0-50-35-30-62C-28-45-18-42-14-52C-12-75-2-95 4-114C26-92 48-58 42-28C40-10 20 0 0 0Z" fill="url(#gF)" stroke="#1b1830" stroke-width="4" stroke-linejoin="round"/>'+
+    '<path d="M0-3C-22-3-27-20-14-40C-9-30-3-30 0-40C17-28 23-10 13-3Z" fill="url(#gF2)"/>'+
+    '<path d="M-31 -44C-29 -54-24 -60-19 -64" fill="none" stroke="#fff" stroke-width="3.5" stroke-linecap="round" opacity=".5"/>'+
+    eyes+mouth+sp;
+}
+
+/* ---- Prizori po temah ---- */
+function cloud(x,y,sc){return '<g transform="translate('+x+','+y+') scale('+sc+')"><path d="M2 20a11 11 0 0 1 6-18a15 15 0 0 1 28-2a12 12 0 0 1 6 20Z" fill="#fff" stroke="#1b1830" stroke-width="3.5" stroke-linejoin="round"/></g>'}
+function scene(k){
+  var s='',sky=k==='z'?'url(#gSkyW)':'url(#gSky)';
+  s+='<rect width="360" height="180" fill="'+sky+'"/>';
+  if(k==='g'){
+    s+=cloud(20,18,.9)+cloud(262,26,1)+
+    '<path d="M124 84L184 54L244 84Z" fill="#e5321f" stroke="#1b1830" stroke-width="4" stroke-linejoin="round"/>'+
+    '<rect x="132" y="84" width="104" height="76" fill="#ffe0b0" stroke="#1b1830" stroke-width="4"/>'+
+    '<path d="M184 54V34" stroke="#1b1830" stroke-width="3.5"/><path d="M184 34L206 40L184 46Z" fill="#ffcf30" stroke="#1b1830" stroke-width="3" stroke-linejoin="round"/>'+
+    '<rect x="154" y="90" width="60" height="14" rx="3" fill="#e5321f" stroke="#1b1830" stroke-width="3"/><text x="184" y="101" text-anchor="middle" font-size="10" font-weight="800" fill="#fff" font-family="Baloo 2,Trebuchet MS,sans-serif">GASILCI</text>'+
+    '<path d="M144 160V128a17 17 0 0 1 34 0V160Z" fill="#c9d3de" stroke="#1b1830" stroke-width="3.5"/><path d="M144 134H178M144 144H178M144 154H178" stroke="#1b1830" stroke-width="2.5" opacity=".5"/>'+
+    '<path d="M190 160V128a17 17 0 0 1 34 0V160Z" fill="#c9d3de" stroke="#1b1830" stroke-width="3.5"/><path d="M190 134H224M190 144H224M190 154H224" stroke="#1b1830" stroke-width="2.5" opacity=".5"/>'+
+    '<rect y="160" width="360" height="20" fill="#b7c0cc"/><path d="M0 170H360" stroke="#fff" stroke-width="3" stroke-dasharray="14 12"/>';
+  }else if(k==='p'){
+    s+=cloud(24,16,.8)+cloud(270,22,1)+
+    '<path d="M0 138C50 100 110 110 150 135C190 105 260 100 360 138V162H0Z" fill="url(#gHill)" stroke="#1b1830" stroke-width="3.5"/>'+
+    '<rect x="186" y="122" width="10" height="40" fill="#9a6a3b" stroke="#1b1830" stroke-width="3"/>'+
+    '<circle cx="191" cy="104" r="28" fill="#4fbf78" stroke="#1b1830" stroke-width="4"/><circle cx="180" cy="96" r="7" fill="#8fe0a3" opacity=".8"/>'+
+    '<rect x="212" y="136" width="38" height="26" rx="4" fill="#fff" stroke="#1b1830" stroke-width="3.5"/><path d="M227 140h8v7h7v8h-7v7h-8v-7h-7v-8h7z" fill="#e5321f" stroke="#1b1830" stroke-width="2"/><path d="M224 136v-5h14v5" fill="none" stroke="#1b1830" stroke-width="3"/>'+
+    '<rect y="160" width="360" height="20" fill="#6fd08c"/>';
+  }else if(k==='z'){
+    s+='<circle cx="60" cy="38" r="16" fill="#fff6b0" stroke="#1b1830" stroke-width="3.5"/>'+
+    '<path d="M126 160V116L146 100L166 116V160Z" fill="#f3d9b6" stroke="#1b1830" stroke-width="4" stroke-linejoin="round"/>'+
+    '<path d="M214 160V112L236 94L258 112V160Z" fill="#f3d9b6" stroke="#1b1830" stroke-width="4" stroke-linejoin="round"/>'+
+    '<path d="M122 118L146 96L170 118Z" fill="#c4553a" stroke="#1b1830" stroke-width="4" stroke-linejoin="round"/><path d="M210 114L236 90L262 114Z" fill="#c4553a" stroke="#1b1830" stroke-width="4" stroke-linejoin="round"/>'+
+    '<rect x="172" y="64" width="38" height="96" fill="#e8c9a0" stroke="#1b1830" stroke-width="4"/><path d="M168 64L191 28L214 64Z" fill="#c4553a" stroke="#1b1830" stroke-width="4" stroke-linejoin="round"/>'+
+    '<circle cx="191" cy="86" r="11" fill="#fff" stroke="#1b1830" stroke-width="3.5"/><path d="M191 86V79M191 86L196 89" stroke="#1b1830" stroke-width="2.5" stroke-linecap="round"/>'+
+    '<path d="M184 140V126a7 7 0 0 1 14 0V140Z" fill="#7a4a2b" stroke="#1b1830" stroke-width="3"/><path d="M191 28V14" stroke="#1b1830" stroke-width="3"/><path d="M191 14L204 19L191 24Z" fill="#e5321f" stroke="#1b1830" stroke-width="2.5" stroke-linejoin="round"/>'+
+    '<rect x="140" y="124" width="12" height="14" rx="6" fill="#7aa7d6" stroke="#1b1830" stroke-width="3"/><rect x="228" y="120" width="12" height="14" rx="6" fill="#7aa7d6" stroke="#1b1830" stroke-width="3"/>'+
+    '<rect y="160" width="360" height="20" fill="#d9b98a"/><path d="M20 170h12M70 174h12M130 168h12M200 174h12M270 169h12M320 173h12" stroke="#1b1830" stroke-width="3" stroke-linecap="round" opacity=".35"/>';
+  }else{
+    s+=cloud(30,20,.9)+cloud(250,18,.8)+
+    '<path d="M0 142C60 112 120 120 170 140C220 114 290 116 360 140V162H0Z" fill="url(#gHill)" stroke="#1b1830" stroke-width="3.5"/>'+
+    '<path d="M150 150L166 112L182 150Z" fill="#2f9e5a" stroke="#1b1830" stroke-width="3.5" stroke-linejoin="round"/><path d="M144 160L166 124L188 160Z" fill="#3fb36a" stroke="#1b1830" stroke-width="3.5" stroke-linejoin="round"/>'+
+    '<path d="M214 160L238 118L262 160Z" fill="#e5321f" stroke="#1b1830" stroke-width="4" stroke-linejoin="round"/><path d="M238 118V160" stroke="#1b1830" stroke-width="3" opacity=".5"/><path d="M238 138L228 160H248Z" fill="#1b1830"/><path d="M238 118V104" stroke="#1b1830" stroke-width="3"/><path d="M238 104L250 109L238 114Z" fill="#ffcf30" stroke="#1b1830" stroke-width="2.5" stroke-linejoin="round"/>'+
+    '<rect y="160" width="360" height="20" fill="#6fd08c"/>';
+  }
+  return s+'<path d="M0 160H360" stroke="#1b1830" stroke-width="4"/>';
+}
+
+/* ---- Oder ---- */
+function stage(o){
+  o=o||{};
+  var from=o.from==null?1:o.from,to=o.to==null?1:o.to,i,conf='',fx='';
+  if(o.confetti){var cc=['#e5321f','#ffcf30','#1c74d9','#1f9d55','#ff8a1f'];for(i=0;i<18;i++)conf+='<i style="left:'+(3+i*5.4)+'%;background:'+cc[i%5]+';animation-delay:'+((i*.13)%1.4).toFixed(2)+'s"></i>'}
+  if(o.jet){
+    fx+='<path class="jet" pathLength="100" d="M134 86Q200 56 262 108"/><path class="jet jet2" pathLength="100" d="M134 85Q200 55 262 107"/>';
+    var dr=[[-16,-12],[-4,-22],[10,-16],[18,-4]];
+    for(i=0;i<4;i++)fx+='<circle class="drop" style="--dx:'+dr[i][0]+'px;--dy:'+dr[i][1]+'px" cx="262" cy="108" r="3.4"/>';
+    fx+='<circle class="puff" cx="274" cy="86" r="9"/><circle class="puff" style="animation-delay:.55s" cx="288" cy="80" r="7"/>';
+  }
+  if(to<=.45&&!o.jet)fx+='<g class="smoke"><circle cx="286" cy="132" r="10"/><circle style="animation-delay:1s" cx="298" cy="120" r="12"/><circle style="animation-delay:2s" cx="280" cy="112" r="9"/></g>';
+  return '<div class="stagewrap"><svg class="stage" viewBox="0 0 360 180" role="img" aria-label="Gašper z brizgalko in plamen Iskrica">'+
+    scene(o.scene||'g')+
+    '<g transform="translate(2,4) scale(.98)">'+gasper(o.g||'happy')+'</g>'+
+    '<g class="fl'+(o.anim?' anim':'')+'" style="--from:'+from+';--to:'+to+'"><g class="flick'+(o.f==='flare'?' flare':'')+'">'+flame(o.f||'grin')+'</g></g>'+fx+
+    '</svg>'+(conf?'<div class="confetti" aria-hidden="true">'+conf+'</div>':'')+
+    (o.burst?'<div class="burst"><svg viewBox="0 0 100 100" aria-hidden="true"><polygon points="50,0 61,18 82,10 80,32 100,38 84,52 96,72 74,74 70,96 52,84 36,100 30,78 8,80 18,60 0,46 20,36 14,16 36,22" fill="#ffcf30" stroke="#1b1830" stroke-width="3" stroke-linejoin="round"/></svg><span>'+esc(o.burst)+'</span></div>':'')+'</div>';
+}
+
+/* ---- Značke činov in tem ---- */
+function badge(idx,size){
+  var R=RANKS[idx],g=R.g,em=[1,0,2,3,4,5,6,7,8][g],tier=C[R.bd],
+      inner={blue:'#bcd9f7',red:'#ffb8aa',silver:'#eef1f5',gold:'#ffe58a'}[R.bd],e='';
+  var K='stroke="#1b1830" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"';
+  if(em===0)e='<path d="M0 13C-10 13-12 3-6-6C-5-1-1-1 0-5C-1-12 3-16 4-20C12-14 14-4 12 2C10 8 6 13 0 13Z" fill="#ff6a1a" '+K+'/><path d="M0 11C-5 11-6 6-3 2C-1 4 1 4 2 1C6 4 6 9 0 11Z" fill="#ffcf30"/>';
+  else if(em===1)e='<path d="M0-17C8-5 12 1 12 8A12 12 0 0 1-12 8C-12 1-8-5 0-17Z" fill="#1c74d9" '+K+'/><path d="M-5 8A6 6 0 0 0 0 14" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" opacity=".7"/>';
+  else if(em===2)e='<rect x="-8" y="-5" width="16" height="20" rx="3" fill="#e5321f" '+K+'/><path d="M-10-5a10 10 0 0 1 20 0Z" fill="#e5321f" '+K+'/><rect x="-14" y="1" width="6" height="7" rx="2" fill="#ffcf30" '+K+'/><rect x="8" y="1" width="6" height="7" rx="2" fill="#ffcf30" '+K+'/><circle cx="0" cy="-12" r="2.5" fill="#ffcf30" stroke="#1b1830" stroke-width="2"/>';
+  else if(em===3)e='<path d="M-14 7C-14-14 14-14 14 7Z" fill="#e5321f" '+K+'/><rect x="-17" y="5" width="34" height="7" rx="3.5" fill="#e5321f" '+K+'/><path d="M-5-6h10v7l-5 4-5-4z" fill="#ffcf30" '+K+'/>';
+  else if(em===4)e='<path d="M-8-16V16M8-16V16" stroke="#1b1830" stroke-width="9" stroke-linecap="round"/><path d="M-8-16V16M8-16V16" stroke="#ffcf30" stroke-width="4.5" stroke-linecap="round"/><path d="M-8-8H8M-8 0H8M-8 8H8" stroke="#1b1830" stroke-width="6" stroke-linecap="round"/><path d="M-8-8H8M-8 0H8M-8 8H8" stroke="#ff8a1f" stroke-width="2.5" stroke-linecap="round"/>';
+  else if(em===5)e='<path d="M-10 6C-10-12 10-12 10 6Z" fill="#e5321f" '+K+'/><rect x="-14" y="5" width="28" height="7" rx="2" fill="#2b2740" '+K+'/><path d="M-16-10L-12-6M0-18V-13M16-10L12-6" stroke="#1b1830" stroke-width="3" stroke-linecap="round"/><path d="M-5-2C-5-7 0-8 3-8" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" opacity=".7"/>';
+  else if(em===6)e='<path d="M0-17L5-5L18-4L8 4L11 17L0 10L-11 17L-8 4L-18-4L-5-5Z" fill="#e5321f" '+K+'/>';
+  else if(em===8)e='<path d="M-15 12L-15-3L-7 4L0-9L7 4L15-3L15 12Z" fill="#e5321f" '+K+'/><rect x="-15" y="12" width="30" height="5" rx="2" fill="#ffcf30" '+K+'/><polygon transform="translate(-11,-14)" points="0,-4.5 1.3,-1.4 4.4,-1.1 2,1 2.8,4.4 0,2.6 -2.8,4.4 -2,1 -4.4,-1.1 -1.3,-1.4" fill="#ffcf30" stroke="#1b1830" stroke-width="1.6"/><polygon transform="translate(11,-14)" points="0,-4.5 1.3,-1.4 4.4,-1.1 2,1 2.8,4.4 0,2.6 -2.8,4.4 -2,1 -4.4,-1.1 -1.3,-1.4" fill="#ffcf30" stroke="#1b1830" stroke-width="1.6"/>';
+  else e='<path d="M-15 11L-15-6L-7 1L0-12L7 1L15-6L15 11Z" fill="#e5321f" '+K+'/><rect x="-15" y="11" width="30" height="5" rx="2" fill="#ffcf30" '+K+'/><circle cx="0" cy="2" r="3" fill="#ffcf30" stroke="#1b1830" stroke-width="2"/>';
+  return '<svg class="bdg" viewBox="0 0 80 92" width="'+size+'" height="'+Math.round(size*92/80)+'" aria-hidden="true"><path d="M40 4L72 14V46C72 68 56 82 40 88C24 82 8 68 8 46V14Z" fill="'+tier+'" stroke="#1b1830" stroke-width="4.5" stroke-linejoin="round"/><path d="M40 12L64 20V46C64 63 52 74 40 80C28 74 16 63 16 46V20Z" fill="'+inner+'" stroke="#1b1830" stroke-width="2.5" stroke-linejoin="round"/><path d="M16 22L40 14V46" fill="none" stroke="#fff" stroke-width="3" opacity=".5" stroke-linecap="round"/><g transform="translate(40,44)">'+e+'</g>'+(R.s?'<text x="40" y="76" text-anchor="middle" font-size="13" font-weight="800" fill="#1b1830" font-family="Baloo 2,Trebuchet MS,sans-serif">'+(R.s===1?'I.':'II.')+'</text>':'')+'</svg>';
+}
+function medal(t){
+  var tot=poolOf(t).length,m=mastered(t),lv=m>=tot?3:m>=tot*.66?2:m>=tot*.33?1:0;
+  var ring=['#b7bfca','#d98c4a','#c4ccd6','#ffcf30'][lv],st='';
+  for(var i=0;i<3;i++)st+='<span style="color:'+(i<lv?'#ffcf30':'#fff')+'">★</span>';
+  return '<div class="med"><svg viewBox="0 0 64 64" width="64" height="64" aria-hidden="true"><circle cx="32" cy="32" r="28" fill="'+ring+'" stroke="#1b1830" stroke-width="4"/><circle cx="32" cy="32" r="20" style="fill:'+TOPICS[t].bg+';opacity:'+(lv?1:.4)+'" stroke="#1b1830" stroke-width="3"/><path d="M20 24C24 18 32 16 38 18" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" opacity=".5"/></svg><div class="medst">'+st+'</div><b>'+TOPICS[t].n+'</b><small>'+m+' od '+tot+'</small></div>';
+}
+
+/* ================= STANJE ================= */
+var app=document.getElementById('app');
+var view='home',G=null,DUELCODE='',STATUS='',CONFIRM=false;
+var TS={n:2,names:['Plameni','Hidranti','Čelade','Brizgalke'],per:5};
+
+function go(v){view=v;STATUS='';CONFIRM=false;render();try{window.scrollTo(0,0)}catch(e){}}
+function render(){app.innerHTML=({home:vHome,play:vPlay,result:vResult,rank:vRank,duel:vDuel,team:vTeam,board:vBoard})[view]()}
+
+/* ================= ZASLONI ================= */
+function vHome(){
+  var xp=S.xp,ri=rankIdx(xp),nx=RANKS[ri+1];
+  var pct=nx?Math.round((xp-RANKS[ri].x)/(nx.x-RANKS[ri].x)*100):100;
+  var tp='';
+  ['g','p','z','v'].forEach(function(t){
+    var tot=poolOf(t).length,m=mastered(t);
+    tp+='<button class="topic" data-act="play" data-t="'+t+'" style="background:'+TOPICS[t].bg+';color:'+TOPICS[t].fg+'"><b>'+TOPICS[t].n+'</b><small>Znam '+m+' od '+tot+'</small><span class="bar"><i style="width:'+Math.round(m/tot*100)+'%"></i></span></button>';
+  });
+  return ''+
+  '<div class="logo"><h1>Gasilska<br>akademija</h1><span class="sub">Pogasi ogenj, pridobi čin!</span></div>'+
+  stage({g:'cheer',burst:'HEJ!'})+
+  '<div class="panel"><div class="rankcard">'+badge(ri,72)+'<div style="flex:1;min-width:0"><div style="font-weight:800;font-size:1.3rem">'+esc(nick())+'</div><div>Čin: <b>'+RANKS[ri].n+'</b></div><div style="margin-top:4px">'+ep(ri,60)+'</div></div></div>'+
+  '<div class="bar" style="margin-top:10px"><i style="width:'+pct+'%"></i></div>'+
+  '<div class="note" style="margin-top:6px">'+(nx?'Še '+(nx.x-xp)+' '+tocke(nx.x-xp)+' do čina '+nx.n+'.':'Dosegel si najvišji čin. Ostani legenda!')+'</div></div>'+
+  '<div class="panel"><label for="nick">Tvoj vzdevek (ne vpisuj pravega imena)</label><div class="codebox"><input type="text" id="nick" maxlength="16" value="'+esc(S.nick)+'" placeholder="npr. Hitri Hidrant" autocomplete="off"><button class="btn small" data-act="dice" aria-label="Naključen vzdevek">Kocka</button></div></div>'+
+  '<button class="btn red big" data-act="play" data-t="all">Igraj: vse teme</button>'+
+  '<div><h2 style="margin-bottom:10px">Izberi temo</h2><div class="topics">'+tp+'</div></div>'+
+  '<div class="grid2"><button class="btn blue" data-act="duel">Dvoboj s kodo</button><button class="btn green" data-act="team">Ekipe na istem zaslonu</button></div>'+
+  '<div class="row sp"><button class="btn white small" data-act="rank">Moji čini</button><button class="btn white small" data-act="board">Lestvica mentorja</button><button class="btn white small" data-act="snd">Zvok: '+(S.snd?'vklopljen':'izklopljen')+'</button></div>'+
+  '<p class="note center">Napredek se shrani na tej napravi. Vprašanja so iz gradiva za pionirje (2019).</p>';
+}
+function tocka(n){return n===1?'točka':n===2?'točki':(n===3||n===4)?'točke':'točk'}
+function tocke(n){return n===1?'točko':n===2?'točki':(n===3||n===4)?'točke':'točk'}
+
+function vPlay(){
+  var it=G.queue[0],A=G.ans,idx=G.total-G.queue.length;
+  var teamBanner='',tIdx=0;
+  if(G.mode==='team'){tIdx=idx%G.teams.length;teamBanner='<div class="team-banner" style="background:'+TEAMCOL[tIdx]+'">Na vrsti: '+esc(G.teams[tIdx].name)+'</div>'}
+  var pips='';
+  for(var i=0;i<G.total;i++){var c='pip';if(i<G.log.length)c+=G.log[i]?' done':' bad';else if(i===G.log.length)c+=' now';pips+='<span class="'+c+'"></span>'}
+  var chip=G.mode==='solo'?'<span class="chip">'+S.xp+' '+tocka(S.xp)+'</span>':G.mode==='duel'?'<span class="chip">Dvoboj</span>':'<span class="chip">Ekipe</span>';
+  var sc=function(r){return +(0.28+0.72*Math.min(1,r/G.total)).toFixed(3)};
+  var cur=sc(G.queue.length),to=cur,from=cur,anim=false,jet=false,mood='happy',fm='grin',burst='';
+  if(A){
+    anim=true;
+    if(A.ok){from=cur;to=sc(G.queue.length-1);jet=true;mood='cheer';fm='hurt';burst=A.boom}
+    else{mood='sad';fm='laugh';burst='UPS!'}
+  }
+  var tg=TOPICS[it.q.t];
+  var opts='';
+  it.opts.forEach(function(o,i){
+    var cls='opt';
+    if(A){if(i===it.ci)cls+=' right';else if(i===A.i)cls+=' wrong';else cls+=' dim'}
+    opts+='<button class="'+cls+(A&&!A.ok&&i===A.i?' shake':'')+'" data-act="ans" data-i="'+i+'"'+(A?' disabled':'')+'><span class="let">'+'ABC'.charAt(i)+'</span><span>'+esc(o)+'</span></button>';
+  });
+  var listen=slVoice()?'<button class="btn small white" data-act="listen" aria-label="Preberi na glas">Poslušaj</button>':'';
+  var fb='';
+  if(A){
+    var last=G.queue.length===1;
+    var nextLabel=last?'Konec kroga':'Naprej';
+    if(A.ok){
+      fb='<div class="bubble good" id="fb"><h3>'+esc(A.praise)+'</h3>'+(A.bonus?'<span class="bonus">Vroča serija! +2 točki</span>':'')+'<p class="fact"><b>Zapomni si:</b> '+esc(it.q.fact)+'</p></div>';
+    }else{
+      fb='<div class="bubble bad" id="fb"><h3>'+esc(A.oops)+'</h3><p class="ans">Pravilno je: '+esc(it.q.right)+'</p><p class="fact"><b>Zapomni si:</b> '+esc(it.q.fact)+'</p>'+(G.mode==='solo'&&!it.retry?'<p class="note" style="margin-top:6px">To vprašanje bomo še enkrat poskusili.</p>':'')+'</div>';
+    }
+    fb+='<button class="btn red big" data-act="next">'+nextLabel+'</button>';
+  }
+  return ''+
+  '<div class="top"><button class="btn small white" data-act="home">Domov</button><div class="pips" aria-label="Napredek">'+pips+'</div>'+chip+'</div>'+
+  teamBanner+
+  stage({g:mood,f:fm,from:from,to:to,anim:anim,jet:jet,burst:burst,scene:it.q.t})+
+  '<div class="panel qcard"><div class="row sp"><span class="tag" style="background:'+tg.bg+';color:'+tg.fg+'">'+tg.n+'</span>'+listen+'</div>'+
+  (it.q.icon?'<div class="qicon" aria-hidden="true">'+(it.q.icon.charAt(0)==='<'?it.q.icon.replace(/width="46" height="46"/,'width="64" height="64"'):'<span style="font-size:'+(it.q.icon==='@'?'3.6rem;font-weight:800':'3.2rem')+'">'+it.q.icon+'</span>')+'</div>':'')+
+  '<p class="qtext">'+esc(it.q.q)+'</p></div>'+
+  '<div class="opts">'+opts+'</div>'+fb;
+}
+
+function stars(n){var s='';for(var i=0;i<3;i++)s+='<span class="'+(i<n?'on':'off')+'">★</span>';return '<div class="stars" aria-label="'+n+' od 3 zvezdic">'+s+'</div>'}
+
+function vResult(){
+  var R=G.result,h='';
+  if(G.mode==='solo'){
+    h+=stage({g:'cheer',f:'hurt',from:.28,to:.28,confetti:true,burst:R.stars>=2?'BRAVO!':'HURA!'});
+    h+='<div class="panel center"><h2>Požar je pogašen!</h2>'+stars(R.stars)+'<p style="font-size:1.3rem;font-weight:800;margin-top:6px">Pravilno: '+G.ok+' od '+G.total+'</p><p>Osvojil si '+G.gain+' '+tocke(G.gain)+'.</p></div>';
+    if(R.rankUp){h+='<div class="panel yellow center"><h2>Nov čin!</h2><div class="row" style="justify-content:center;margin:8px 0"><span class="badgepop">'+badge(R.after,130)+'</span></div><div class="row" style="justify-content:center">'+ep(R.after,76)+'</div><p style="font-size:1.4rem;font-weight:800">'+RANKS[R.after].n+'</p></div>'}
+    else{var nx=RANKS[R.after+1];h+='<div class="panel"><div class="rankcard">'+badge(R.after,64)+'<div><b>'+RANKS[R.after].n+'</b><div class="note">'+(nx?'Še '+(nx.x-S.xp)+' '+tocke(nx.x-S.xp)+' do čina '+nx.n+'.':'Najvišji čin!')+'</div></div></div></div>'}
+  }else if(G.mode==='duel'){
+    h+=stage({g:'cheer',f:'hurt',from:.28,to:.28,confetti:true,burst:'KONEC!'});
+    h+='<div class="panel center"><h2>Dvoboj '+esc(G.code)+'</h2>'+stars(R.stars)+'<p style="font-size:1.3rem;font-weight:800;margin-top:6px">'+G.ok+' od '+G.total+' pravilno v '+R.time+' s</p></div>';
+    h+='<div class="panel"><label for="rc">Pošlji ta rezultat prijatelju ali mentorju</label><div class="codebox"><input type="text" id="rc" readonly value="'+esc(R.line)+'"><button class="btn small" data-act="copy">Kopiraj</button></div><div class="status" id="st">'+esc(STATUS)+'</div></div>';
+    h+=boardHtml(G.code);
+  }else{
+    var t=G.teams.slice().sort(function(a,b){return b.score-a.score}),top=t[0].score,tie=t.filter(function(x){return x.score===top}).length>1;
+    h+=stage({g:'cheer',f:'hurt',from:.28,to:.28,confetti:true,burst:'PRVI!'});
+    h+='<div class="panel center"><h2>'+(tie?'Neodločeno! Vsi zmagovalci so:':'Zmagovalna ekipa:')+'</h2><p style="font-size:1.7rem;font-weight:800;margin-top:4px">'+t.filter(function(x){return x.score===top}).map(function(x){return esc(x.name)}).join(' in ')+'</p></div>';
+    h+='<div class="panel"><ul class="list">'+t.map(function(x,i){return '<li class="row sp"><span><span class="medal">'+(i+1)+'</span><b>'+esc(x.name)+'</b></span><span><b>'+x.score+'</b> od '+G.per+'</span></li>'}).join('')+'</ul></div>';
+  }
+  if(G.missed.length&&G.mode!=='team'){
+    h+='<div class="panel"><h2 style="margin-bottom:8px">Še enkrat preberi</h2><ul class="list">'+G.missed.slice(0,6).map(function(q){return '<li><b>'+(q.icon&&q.icon.charAt(0)!=='<'?q.icon+' ':'')+esc(q.q)+'</b><br>'+esc(q.right)+'</li>'}).join('')+'</ul></div>';
+  }
+  h+='<div class="grid2"><button class="btn red" data-act="again">'+(G.mode==='team'?'Nova igra':'Še enkrat')+'</button><button class="btn white" data-act="home">Domov</button></div>';
+  return h;
+}
+
+function vRank(){
+  var ri=rankIdx(S.xp),h='<div class="top"><button class="btn small white" data-act="home">Domov</button><h2>Moji čini</h2><span class="chip">'+S.xp+' '+tocka(S.xp)+'</span></div>';
+  h+='<div class="panel"><h2 style="margin-bottom:8px">Značke tem</h2><div class="meds">'+['g','p','z','v'].map(medal).join('')+'</div><p class="note center" style="margin-top:6px">Ko znaš tretjino, dve tretjini in vsa vprašanja teme, dobiš zvezdico.</p></div>';
+  h+='<div class="panel yellow"><p>Za vsak pravilen odgovor dobiš 1 točko. Pet pravilnih zapored pa prinese še 2 bonus točki. Napreduješ po znakih činov gasilcev, od pionirja do visokega gasilskega častnika. Obroba je modra, rdeča, srebrna ali zlata. Plamenice (1 do 3) kažejo stopnjo, lipov list pa imajo samo višji in visoki častniki.</p></div>';
+  h+='<div class="list" style="display:flex;flex-direction:column;gap:10px">';
+  for(var i=RANKS.length-1;i>=0;i--){h+='<div class="rk'+(i===ri?' cur':i>ri?' lock':'')+'">'+badge(i,48)+'<div style="flex:1;min-width:0"><b>'+RANKS[i].n+'</b><div class="note">'+(i===ri?'Tvoj čin':i===0?'Začetek poti':'od '+RANKS[i].x+' točk')+'</div></div>'+ep(i,46)+'</div>'}
+  h+='</div><p class="note center">Barve, plamenice in lipovi listi so po standardu za čine Gasilske zveze Slovenije. Razporeditev na znaku je poenostavljena.</p>';
+  h+=CONFIRM?'<div class="panel"><p style="font-weight:800">Res želiš izbrisati ves napredek na tej napravi?</p><div class="grid2" style="margin-top:10px"><button class="btn red" data-act="resetyes">Da, izbriši</button><button class="btn white" data-act="resetno">Ne</button></div></div>':'<button class="btn white small" data-act="reset">Izbriši napredek</button>';
+  return h;
+}
+
+function boardHtml(code){
+  var b=(S.duel[code]||[]).slice().sort(function(a,c){return c.score-a.score||a.time-c.time}).slice(0,8);
+  if(!b.length)return '';
+  return '<div class="panel"><h2 style="margin-bottom:8px">Lestvica na tej napravi</h2><ul class="list">'+b.map(function(r,i){return '<li class="row sp"><span><span class="medal">'+(i+1)+'</span><b>'+esc(r.nick)+'</b></span><span>'+r.score+' točk, '+r.time+' s</span></li>'}).join('')+'</ul></div>';
+}
+function parseBoard(txt){
+  var by={};
+  String(txt||'').split(/\r?\n/).forEach(function(l){
+    var m=l.trim().match(/^Gasilski dvoboj (.+?): (.+), (\d+)\/(\d+) točk v (\d+) s$/);if(!m)return;
+    var c=m[1].trim().toUpperCase(),nk=m[2].trim(),sc=+m[3],tm=+m[5],a=by[c]||(by[c]={}),k=nk.toLowerCase();
+    if(!a[k]||sc>a[k].score||(sc===a[k].score&&tm<a[k].time))a[k]={nick:nk,score:sc,time:tm};
+  });
+  return by;
+}
+function boardOut(){
+  var by=parseBoard(S.paste),codes=Object.keys(by);
+  if(!codes.length)return '<p class="note center">Še ni prepoznanih rezultatov. Prilepi vrstice, ki jih otroci kopirajo po dvoboju.</p>';
+  return codes.map(function(c){
+    var rows=Object.keys(by[c]).map(function(k){return by[c][k]}).sort(function(a,b){return b.score-a.score||a.time-b.time});
+    return '<div class="panel"><h2 style="margin-bottom:8px">Koda '+esc(c)+'</h2><ul class="list">'+rows.map(function(r,i){return '<li class="row sp"><span><span class="medal">'+(i+1)+'</span><b>'+esc(r.nick)+'</b></span><span>'+r.score+' točk, '+r.time+' s</span></li>'}).join('')+'</ul></div>';
+  }).join('');
+}
+function vBoard(){
+  return ''+
+  '<div class="top"><button class="btn small white" data-act="home">Domov</button><h2>Skupna lestvica</h2><span></span></div>'+
+  '<div class="panel yellow"><p>Za mentorja: otroci po dvoboju pritisnejo Kopiraj in ti pošljejo svojo vrstico. Vse vrstice prilepi sem in lestvica se sestavi sama. Ista koda pomeni ista vprašanja, zato je primerjava poštena.</p></div>'+
+  '<div class="panel"><label for="paste">Prilepi rezultate (ena vrstica na otroka)</label><textarea id="paste" placeholder="Gasilski dvoboj HIDRANT7: Hitri Hidrant, 9/10 točk v 52 s">'+esc(S.paste||'')+'</textarea><div class="row" style="margin-top:8px"><button class="btn small white" data-act="clearboard">Počisti</button></div></div>'+
+  '<div id="bout" style="display:flex;flex-direction:column;gap:16px">'+boardOut()+'</div>';
+}
+function vDuel(){
+  return ''+
+  '<div class="top"><button class="btn small white" data-act="home">Domov</button><h2>Dvoboj s kodo</h2><span></span></div>'+
+  stage({g:'happy',f:'grin'})+
+  '<div class="panel"><p>Vsi, ki vpišejo <b>isto kodo</b>, dobijo <b>ista vprašanja</b> v istem vrstnem redu. Kdo bo imel več točk? Pri enakem številu točk zmaga hitrejši.</p></div>'+
+  '<div class="panel"><label for="code">Koda dvoboja</label><div class="codebox"><input type="text" id="code" maxlength="16" value="'+esc(DUELCODE)+'" placeholder="npr. HIDRANT7" autocomplete="off" autocapitalize="characters"><button class="btn small" data-act="newcode">Naključna</button></div></div>'+
+  '<button class="btn red big" data-act="duelgo">Začni dvoboj (10 vprašanj)</button>'+
+  (DUELCODE?boardHtml(DUELCODE.trim().toUpperCase()):'')+
+  '<p class="note center">Mentor lahko vsem pove kodo. Rezultate primerjate tako, da si pošljete rezultat s tipko Kopiraj.</p>';
+}
+function vTeam(){
+  var names='';
+  for(var i=0;i<TS.n;i++)names+='<div><label for="tn'+i+'" style="color:'+TEAMCOL[i]+'">Ekipa '+(i+1)+'</label><input type="text" id="tn'+i+'" maxlength="14" value="'+esc(TS.names[i])+'" autocomplete="off"></div>';
+  function seg(act,vals,cur){return '<div class="seg">'+vals.map(function(v){return '<button class="btn'+(v===cur?' on':'')+'" data-act="'+act+'" data-n="'+v+'">'+v+'</button>'}).join('')+'</div>'}
+  return ''+
+  '<div class="top"><button class="btn small white" data-act="home">Domov</button><h2>Ekipe</h2><span></span></div>'+
+  stage({g:'cheer',f:'grin'})+
+  '<div class="panel"><p>Ekipe se menjavajo pri istem zaslonu. Za pravilen odgovor dobi ekipa točko. Primerno za gasilski krožek ali projektor.</p></div>'+
+  '<div class="panel"><label>Število ekip</label>'+seg('cnt',[2,3,4],TS.n)+'<div style="height:12px"></div><label>Vprašanj na ekipo</label>'+seg('per',[3,5,8],TS.per)+'</div>'+
+  '<div class="panel" style="display:flex;flex-direction:column;gap:10px">'+names+'</div>'+
+  '<button class="btn red big" data-act="teamgo">Začni igro</button>';
+}
+
+/* ================= IGRA ================= */
+function startSolo(t){
+  var rnd=Math.random,n=Math.min(10,poolOf(t).length);
+  var qs=pick(poolOf(t),n,rnd,weightOf);
+  G={mode:'solo',topic:t,queue:qs.map(function(q){return makeItem(q,rnd)}),total:qs.length,ok:0,streak:0,gain:0,ans:null,log:[],missed:[],xp0:S.xp};
+  go('play');
+}
+function startDuel(code){
+  var rnd=mulberry(hash('gasilci-'+code)),qs=pick(QS,10,rnd,null);
+  G={mode:'duel',code:code,queue:qs.map(function(q){return makeItem(q,rnd)}),total:qs.length,ok:0,streak:0,gain:0,ans:null,log:[],missed:[],xp0:S.xp,t0:Date.now()};
+  go('play');
+}
+function startTeam(){
+  var teams=[];
+  for(var i=0;i<TS.n;i++)teams.push({name:(TS.names[i]||'').trim()||('Ekipa '+(i+1)),score:0});
+  var rnd=Math.random,qs=pick(QS,TS.n*TS.per,rnd,null);
+  G={mode:'team',teams:teams,per:TS.per,queue:qs.map(function(q){return makeItem(q,rnd)}),total:qs.length,ok:0,streak:0,gain:0,ans:null,log:[],missed:[],xp0:S.xp};
+  go('play');
+}
+function answer(i){
+  if(!G||G.ans)return;
+  var it=G.queue[0],ok=i===it.ci,idx=G.total-G.queue.length;
+  G.ans={i:i,ok:ok,praise:rpick(PRAISE),oops:rpick(OOPS),boom:rpick(BOOMS),bonus:false};
+  if(G.mode!=='team'&&!it.retry){
+    var s=S.q[it.q.id]||(S.q[it.q.id]={box:0,seen:0});
+    s.seen++;s.box=ok?Math.min(5,s.box+1):Math.max(0,s.box-2);
+  }
+  if(ok&&!it.retry&&G.mode!=='team'){
+    G.ok++;G.streak++;G.gain++;S.xp++;
+    if(G.streak%5===0){G.gain+=2;S.xp+=2;G.ans.bonus=true}
+  }
+  if(ok&&G.mode==='team'){G.teams[idx%G.teams.length].score++}
+  if(!ok){G.streak=0;if(!it.retry&&G.mode!=='team')G.missed.push(it.q)}
+  if(!it.retry)G.log.push(ok);
+  save();beep(ok);render();
+  try{var f=document.getElementById('fb');if(f)f.scrollIntoView({behavior:'smooth',block:'nearest'})}catch(e){}
+}
+function nextQ(){
+  var it=G.queue.shift(),A=G.ans;
+  if(G.mode==='solo'&&!it.retry&&!A.ok){G.queue.push(makeItem(it.q,Math.random,true));G.total=Math.max(G.total,G.log.length+G.queue.length)}
+  G.ans=null;
+  if(!G.queue.length){finish();return}
+  render();try{window.scrollTo(0,0)}catch(e){}
+}
+function finish(){
+  var R={},n=G.total;
+  if(G.mode==='solo'){
+    var base=Math.min(G.ok,10),before=rankIdx(G.xp0),after=rankIdx(S.xp);
+    R.stars=base>=9?3:base>=7?2:base>=4?1:0;R.before=before;R.after=after;R.rankUp=after>before;
+    G.total=G.log.length;
+  }else if(G.mode==='duel'){
+    R.time=Math.round((Date.now()-G.t0)/1000);R.stars=G.ok>=9?3:G.ok>=7?2:G.ok>=4?1:0;
+    R.line='Gasilski dvoboj '+G.code+': '+nick()+', '+G.ok+'/'+n+' točk v '+R.time+' s';
+    var arr=S.duel[G.code]||(S.duel[G.code]=[]);arr.push({nick:nick(),score:G.ok,time:R.time});
+    if(arr.length>30)arr.splice(0,arr.length-30);
+  }
+  G.result=R;save();go('result');
+}
+
+/* ================= DOGODKI ================= */
+var H={
+  home:function(){go('home')},
+  play:function(d){startSolo(d.t)},
+  ans:function(d){answer(+d.i)},
+  next:nextQ,
+  listen:function(){var it=G&&G.queue[0];if(it)speak(it.q.q+'. '+it.opts.join('. '))},
+  rank:function(){go('rank')},
+  board:function(){go('board')},
+  clearboard:function(){S.paste='';save();render()},
+  duel:function(){go('duel')},
+  team:function(){go('team')},
+  snd:function(){S.snd=!S.snd;save();render()},
+  dice:function(){S.nick=rpick(ADJ)+' '+rpick(NOUN);save();render()},
+  newcode:function(){DUELCODE=rpick(CODES)+Math.floor(Math.random()*90+10);render()},
+  duelgo:function(){var c=(DUELCODE||'').trim().toUpperCase();if(!c){DUELCODE=rpick(CODES)+Math.floor(Math.random()*90+10);c=DUELCODE}DUELCODE=c;startDuel(c)},
+  teamgo:startTeam,
+  cnt:function(d){TS.n=+d.n;render()},
+  per:function(d){TS.per=+d.n;render()},
+  again:function(){if(!G)return go('home');if(G.mode==='solo')startSolo(G.topic);else if(G.mode==='duel')go('duel');else go('team')},
+  copy:function(){
+    var el=document.getElementById('rc'),st=document.getElementById('st');if(!el)return;
+    function ok(){STATUS='Kopirano!';if(st)st.textContent=STATUS}
+    function no(){try{el.focus();el.select()}catch(e){}STATUS='Označeno. Pritisni Ctrl+C.';if(st)st.textContent=STATUS}
+    try{navigator.clipboard.writeText(el.value).then(ok,no)}catch(e){no()}
+  },
+  reset:function(){CONFIRM=true;render()},
+  resetno:function(){CONFIRM=false;render()},
+  resetyes:function(){S={nick:S.nick,xp:0,q:{},duel:{},snd:S.snd};save();CONFIRM=false;render()}
+};
+app.addEventListener('click',function(e){
+  var b=e.target.closest('[data-act]');if(!b||b.disabled)return;
+  var f=H[b.getAttribute('data-act')];if(f)f({t:b.getAttribute('data-t'),i:b.getAttribute('data-i'),n:b.getAttribute('data-n')});
+});
+app.addEventListener('input',function(e){
+  var t=e.target,id=t.id;
+  if(id==='nick'){S.nick=t.value.slice(0,16);save()}
+  else if(id==='code'){DUELCODE=t.value}
+  else if(id==='paste'){S.paste=t.value;save();var o=document.getElementById('bout');if(o)o.innerHTML=boardOut()}
+  else if(/^tn\d$/.test(id)){TS.names[+id.charAt(2)]=t.value}
+});
+try{window.speechSynthesis&&(speechSynthesis.onvoiceschanged=function(){})}catch(e){}
+
+render();
+})();
+</script>
+</body>
+</html>
